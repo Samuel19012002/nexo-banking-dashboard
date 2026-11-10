@@ -120,8 +120,16 @@ OpenAI Codex was used for product scoping, architecture, frontend implementation
 
 ## Deployment approach
 
-- Frontend: Vercel
-- Backend: Render, Railway, Fly.io, or another Python container host
-- Database: managed PostgreSQL from the chosen backend provider
+The repository includes a Render Blueprint (`render.yaml`) that provisions the
+FastAPI service and a managed PostgreSQL database together.
 
-Set `NEXT_PUBLIC_API_URL` in the frontend deployment and `DATABASE_URL` plus `FRONTEND_ORIGIN` in the backend deployment.
+1. In Render, create a new Blueprint from this repository.
+2. When prompted for `FRONTEND_ORIGIN`, enter the deployed frontend origin
+   without a trailing slash (for example, `https://nexo-banking-dashboard.vercel.app`).
+3. In Vercel, import this repository and set the project root directory to
+   `frontend`.
+4. Add `NEXT_PUBLIC_API_URL` in Vercel using the Render API URL followed by
+   `/api` (for example, `https://nexo-banking-api.onrender.com/api`).
+5. Redeploy the frontend after saving the environment variable.
+
+Both platforms then deploy automatically when new commits reach `main`.

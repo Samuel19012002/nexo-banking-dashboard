@@ -10,6 +10,11 @@ DATABASE_URL = os.getenv(
     "postgresql+psycopg://nexo:nexo_dev_password@localhost:5432/nexo",
 )
 
+# Managed providers commonly expose the generic PostgreSQL scheme. Explicitly
+# select psycopg 3, which is the driver installed by this project.
+if DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
+
 engine_options = {"pool_pre_ping": True}
 if DATABASE_URL.startswith("sqlite"):
     engine_options["connect_args"] = {"check_same_thread": False}
