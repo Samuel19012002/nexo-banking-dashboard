@@ -62,3 +62,18 @@ def test_rejects_payment_above_available_balance() -> None:
             json={"recipient": "Large Vendor", "amount": 999999, "account_last4": "4821"},
         )
         assert response.status_code == 422
+
+
+def test_allows_vercel_frontend_origins() -> None:
+    origin = "https://frontend-gules-seven-40.vercel.app"
+    with TestClient(app) as client:
+        response = client.options(
+            "/api/accounts",
+            headers={
+                "Origin": origin,
+                "Access-Control-Request-Method": "GET",
+            },
+        )
+
+    assert response.status_code == 200
+    assert response.headers["access-control-allow-origin"] == origin
